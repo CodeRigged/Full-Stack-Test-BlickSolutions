@@ -3,7 +3,7 @@ import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
 import { Locales } from "shared/types";
-import todoRoutes from "./api/routes/todoRoutes";
+import todoRoutes from "./api/routes/shoppingRoutes";
 
 // MongoDB connection
 const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/todos";

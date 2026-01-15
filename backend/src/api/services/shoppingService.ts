@@ -1,10 +1,10 @@
-import { ITodo, Todo } from "../models/Todo";
+import { ITodo, Todo } from "../models/ShoppingItem";
 
 /**
- * Fetch all todos from the database.
+ * Fetch all shopping from the database.
  * @returns {Promise<ITodo[]>} Array of todo documents
  */
-export const getAllTodos = async (): Promise<ITodo[]> => {
+export const getAllshopping = async (): Promise<ITodo[]> => {
   return Todo.find();
 };
 
