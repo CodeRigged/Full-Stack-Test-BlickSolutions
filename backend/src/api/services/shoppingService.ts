@@ -1,41 +1,50 @@
-import { ITodo, Todo } from "../models/ShoppingItem";
+import { IShoppingItem, ShoppingItem } from "../models/ShoppingItem";
 
 /**
- * Fetch all shopping from the database.
- * @returns {Promise<ITodo[]>} Array of todo documents
+ * Fetch all shopping items from the database.
+ * @returns {Promise<IShoppingItem[]>} Array of shopping item documents
  */
-export const getAllshopping = async (): Promise<ITodo[]> => {
-  return Todo.find();
+export const getAllShoppingItems = async (): Promise<IShoppingItem[]> => {
+  return ShoppingItem.find();
 };
 
 /**
- * Create a new todo with the given text.
- * @param {string} text - The text of the todo
- * @returns {Promise<ITodo>} The created todo document
+ * Create a new shopping item with the given name.
+ * @param {string} name - The name of the shopping item
+ * @returns {Promise<IShoppingItem>} The created shopping item document
  */
-export const createTodo = async (text: string): Promise<ITodo> => {
-  const todo = new Todo({ text });
-  return todo.save();
+export const createShoppingItem = async (
+  name: string
+): Promise<IShoppingItem> => {
+  const shoppingItem = new ShoppingItem({ name });
+  return shoppingItem.save();
 };
 
 /**
- * Update the text of a todo by its ID.
- * @param {string} id - The ID of the todo to update
- * @param {string} text - The new text for the todo
- * @returns {Promise<ITodo | null>} The updated todo document, or null if not found
+ * Update the name and/or bought status of a shopping item by its ID.
+ * @param {string} id - The ID of the shopping item to update
+ * @param {object} updates - The fields to update (name and/or bought)
+ * @returns {Promise<IShoppingItem | null>} The updated shopping item document, or null if not found
  */
-export const updateTodo = async (
+export const updateShoppingItem = async (
   id: string,
-  text: string
-): Promise<ITodo | null> => {
-  return Todo.findByIdAndUpdate(id, { text }, { new: true });
+  updates: Partial<Pick<IShoppingItem, "name" | "bought">>
+): Promise<IShoppingItem | null> => {
+  const updateFields: Partial<Pick<IShoppingItem, "name" | "bought">> = {};
+  if (typeof updates.name !== "undefined") updateFields.name = updates.name;
+  if (typeof updates.bought !== "undefined")
+    updateFields.bought = updates.bought;
+
+  return ShoppingItem.findByIdAndUpdate(id, updateFields, { new: true });
 };
 
 /**
- * Delete a todo by its ID.
- * @param {string} id - The ID of the todo to delete
- * @returns {Promise<ITodo | null>} The deleted todo document, or null if not found
+ * Delete a shopping item by its ID.
+ * @param {string} id - The ID of the shopping item to delete
+ * @returns {Promise<IShoppingItem | null>} The deleted shopping item document, or null if not found
  */
-export const deleteTodo = async (id: string): Promise<ITodo | null> => {
-  return Todo.findByIdAndDelete(id);
+export const deleteShoppingItem = async (
+  id: string
+): Promise<IShoppingItem | null> => {
+  return ShoppingItem.findByIdAndDelete(id);
 };

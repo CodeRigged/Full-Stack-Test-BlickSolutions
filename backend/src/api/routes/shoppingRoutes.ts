@@ -1,12 +1,12 @@
 import { Router } from "express";
-import * as todoController from "../controllers/shoppingController";
+import * as shoppingController from "../controllers/shoppingController";
 
 const router = Router();
 
-// todo routes
-router.get("/", todoController.getTodos);
-router.post("/", todoController.createTodo);
-router.put("/:id", todoController.updateTodo);
-router.delete("/:id", todoController.deleteTodo);
+// shopping item routes
+router.get("/", shoppingController.getShoppingItems);
+router.post("/", shoppingController.createShoppingItem);
+router.put("/:id", shoppingController.updateShoppingItem);
+router.delete("/:id", shoppingController.deleteShoppingItem);
 
 export default router;

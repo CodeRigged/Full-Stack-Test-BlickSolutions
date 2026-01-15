@@ -1,11 +1,15 @@
 import { Document, Schema, model } from "mongoose";
-import { Todo as TodoType } from "shared/types";
+import { ShoppingItem as ShoppingItemType } from "shared/types";
 
-export type ITodo = TodoType & Document;
+export type IShoppingItem = ShoppingItemType & Document;
 
-const todoSchema = new Schema<ITodo>({
-  text: { type: String, required: true },
-  completed: { type: Boolean, default: false },
+const shoppingItemSchema = new Schema<IShoppingItem>({
+  name: { type: String, required: true },
+  bought: { type: Boolean, default: false },
+  createdAt: { type: Date, default: Date.now },
 });
 
-export const Todo = model<ITodo>("Todo", todoSchema);
+export const ShoppingItem = model<IShoppingItem>(
+  "ShoppingItem",
+  shoppingItemSchema
+);
