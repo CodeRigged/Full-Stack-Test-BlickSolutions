@@ -5,7 +5,7 @@ import { IShoppingItem, ShoppingItem } from "../models/ShoppingItem";
  * @returns {Promise<IShoppingItem[]>} Array of shopping item documents
  */
 export const getAllShoppingItems = async (): Promise<IShoppingItem[]> => {
-  return ShoppingItem.find();
+  return ShoppingItem.find().sort({ createdAt: -1 });
 };
 
 /**
