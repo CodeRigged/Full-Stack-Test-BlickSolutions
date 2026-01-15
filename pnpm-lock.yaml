@@ -145,6 +145,9 @@ importers:
 
   shared:
     devDependencies:
+      mongodb:
+        specifier: ^6.21.0
+        version: 6.21.0
       typescript:
         specifier: ^5.4.2
         version: 5.7.2
