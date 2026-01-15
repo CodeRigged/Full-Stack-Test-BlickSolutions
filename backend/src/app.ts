@@ -3,10 +3,10 @@ import cors from "cors";
 import express from "express";
 import mongoose from "mongoose";
 import { Locales } from "shared/types";
-import todoRoutes from "./api/routes/shoppingRoutes";
+import shoppingRoutes from "./api/routes/shoppingRoutes";
 
 // MongoDB connection
-const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/todos";
+const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/shopping";
 mongoose
   .connect(MONGO_URI)
   .then(() => console.log("Connected to MongoDB"))
@@ -33,8 +33,8 @@ app.get("/languages", (_req, res) => {
   res.json({ languages: Object.values(Locales) });
 });
 
-// Todos API
-app.use("/todos", todoRoutes);
+// shopping API
+app.use("/shopping", shoppingRoutes);
 
 // Start server
 app.listen(PORT, () => {
