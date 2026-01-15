@@ -1,13 +1,13 @@
 import { useIntl } from "react-intl"
 import PageLayout from "~/layouts/PageLayout"
-import ToDoList from "./ToDoList"
+import ShoppingList from "./ShoppingList"
 
 const LandingPage = () => {
   const { formatMessage } = useIntl()
 
   return (
     <PageLayout documentTitle={formatMessage({ id: "pages.landing.title" })}>
-      <ToDoList />
+      <ShoppingList />
     </PageLayout>
   )
 }

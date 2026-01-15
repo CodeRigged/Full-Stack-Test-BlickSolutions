@@ -14,89 +14,103 @@ import {
   Typography,
 } from "@mui/material"
 import { useEffect, useState } from "react"
-import { Todo } from "shared/types"
+import { ShoppingItem } from "shared/types"
 import { useErrorStore } from "~/stores/state-handlers"
 import { apiFetch } from "~/utils/api"
 
-const ToDoList = () => {
-  const [todos, setTodos] = useState<Todo[]>([])
-  const [newTodo, setNewTodo] = useState("")
-  const [editId, setEditId] = useState<string | null>(null)
-  const [editText, setEditText] = useState("")
+const ShoppingList = () => {
+  const [items, setItems] = useState<ShoppingItem[]>([])
+  const [newItem, setNewItem] = useState("")
+  const [editId, setEditId] = useState<ShoppingItem["_id"] | null>(null)
+  const [editName, setEditName] = useState("")
   const { setError } = useErrorStore()
   const [loading, setLoading] = useState(false)
 
-  // Fetch todos
-  const fetchTodos = () => {
+  // Fetch shopping items
+  const fetchItems = () => {
     setLoading(true)
-    apiFetch("/todos")
+    apiFetch("/shopping")
       .then(res => res.json())
-      .then(data => setTodos(data.todos))
+      .then(data => setItems(data.shoppingItems))
       .catch(e => setError(e))
       .finally(() => setLoading(false))
   }
 
   useEffect(() => {
-    fetchTodos()
+    fetchItems()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Add todo
+  // Add shopping item
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!newTodo.trim()) return
+    if (!newItem.trim()) return
     setLoading(true)
-    apiFetch("/todos", {
+    apiFetch("/shopping", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: newTodo }),
+      body: JSON.stringify({ name: newItem }),
     })
       .then(res => res.json())
       .then(() => {
-        setNewTodo("")
-        fetchTodos()
+        setNewItem("")
+        fetchItems()
       })
       .catch(e => setError(e))
       .finally(() => setLoading(false))
   }
 
-  // Delete todo
-  const handleDelete = (id: string) => {
+  // Delete shopping item
+  const handleDelete = (id: ShoppingItem["_id"]) => {
     setLoading(true)
-    apiFetch(`/todos/${id}`, { method: "DELETE" })
+    apiFetch(`/shopping/${id}`, { method: "DELETE" })
       .then(res => res.json())
-      .then(() => fetchTodos())
+      .then(() => fetchItems())
       .catch(e => setError(e))
       .finally(() => setLoading(false))
   }
 
-  // Start editing a todo
-  const handleEdit = (id: string, text: string) => {
+  // Start editing a shopping item
+  const handleEdit = (id: ShoppingItem["_id"], name: string) => {
     setEditId(id)
-    setEditText(text)
+    setEditName(name)
   }
 
   // Cancel editing
   const handleCancelEdit = () => {
     setEditId(null)
-    setEditText("")
+    setEditName("")
   }
 
-  // Save edited todo
-  const handleSaveEdit = (id: string) => {
-    if (!editText.trim()) return
+  // Save edited shopping item
+  const handleSaveEdit = (id: ShoppingItem["_id"]) => {
+    if (!editName.trim()) return
     setLoading(true)
-    apiFetch(`/todos/${id}`, {
+    apiFetch(`/shopping/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: editText }),
+      body: JSON.stringify({ name: editName }),
     })
       .then(res => res.json())
       .then(() => {
         setEditId(null)
-        setEditText("")
-        fetchTodos()
+        setEditName("")
+        fetchItems()
       })
+      .catch(e => setError(e))
+      .finally(() => setLoading(false))
+  }
+
+  // Toggle bought status
+  const handleToggleBought = (id: ShoppingItem["_id"], bought: boolean) => {
+    setLoading(true)
+    apiFetch(`/shopping/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ bought: !bought }),
+    })
+      .then(res => res.json())
+      .then(() => fetchItems())
       .catch(e => setError(e))
       .finally(() => setLoading(false))
   }
@@ -104,18 +118,18 @@ const ToDoList = () => {
   return (
     <Box maxWidth={480} mx="auto" mt={4}>
       <Typography variant="h4" gutterBottom align="center">
-        Todo List
+        Shopping List
       </Typography>
       <Box component="form" onSubmit={handleAdd} mb={3} display="flex" gap={2}>
         <TextField
-          value={newTodo}
-          onChange={e => setNewTodo(e.target.value)}
-          placeholder="Add a new todo"
+          value={newItem}
+          onChange={e => setNewItem(e.target.value)}
+          placeholder="Add a new shopping item"
           disabled={loading}
           size="small"
           fullWidth
         />
-        <Button type="submit" variant="contained" color="primary" disabled={loading || !newTodo.trim()}>
+        <Button type="submit" variant="contained" color="primary" disabled={loading || !newItem.trim()}>
           Add
         </Button>
       </Box>
@@ -125,35 +139,54 @@ const ToDoList = () => {
         </Box>
       )}
       <Stack spacing={2}>
-        {todos.map(todo => (
-          <Card key={todo._id} variant="outlined">
-            <CardContent>
-              {editId === todo._id ? (
+        {items.map(item => (
+          <Card key={item._id as unknown as string} variant="outlined">
+            <CardContent sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <Button
+                size="small"
+                variant={item.bought ? "contained" : "outlined"}
+                color={item.bought ? "success" : "inherit"}
+                onClick={() => handleToggleBought(item._id, item.bought)}
+                disabled={loading || item.bought}
+                sx={{ minWidth: 80 }}
+              >
+                {item.bought ? "Bought" : "Buy"}
+              </Button>
+              {editId === item._id ? (
                 <TextField
-                  value={editText}
-                  onChange={e => setEditText(e.target.value)}
+                  value={editName}
+                  onChange={e => setEditName(e.target.value)}
                   size="small"
                   fullWidth
                   autoFocus
                   onKeyDown={e => {
-                    if (e.key === "Enter") handleSaveEdit(todo._id)
+                    if (e.key === "Enter") handleSaveEdit(item._id)
                     if (e.key === "Escape") handleCancelEdit()
                   }}
                   disabled={loading}
+                  sx={{ ml: 2 }}
                 />
               ) : (
-                <Typography>{todo.text}</Typography>
+                <Typography
+                  sx={{
+                    textDecoration: item.bought ? "line-through" : "none",
+                    color: item.bought ? "text.secondary" : "text.primary",
+                    ml: 2,
+                  }}
+                >
+                  {item.name}
+                </Typography>
               )}
             </CardContent>
             <CardActions>
-              {editId === todo._id ? (
+              {editId === item._id ? (
                 <>
                   <Button
                     size="small"
                     color="primary"
                     startIcon={<SaveIcon />}
-                    onClick={() => handleSaveEdit(todo._id)}
-                    disabled={loading || !editText.trim()}
+                    onClick={() => handleSaveEdit(item._id)}
+                    disabled={loading || !editName.trim()}
                   >
                     Save
                   </Button>
@@ -173,7 +206,7 @@ const ToDoList = () => {
                     size="small"
                     color="info"
                     startIcon={<EditIcon />}
-                    onClick={() => handleEdit(todo._id, todo.text)}
+                    onClick={() => handleEdit(item._id, item.name)}
                     disabled={loading}
                   >
                     Edit
@@ -182,7 +215,7 @@ const ToDoList = () => {
                     size="small"
                     color="error"
                     startIcon={<DeleteIcon />}
-                    onClick={() => handleDelete(todo._id)}
+                    onClick={() => handleDelete(item._id)}
                     disabled={loading}
                   >
                     Delete
@@ -193,13 +226,13 @@ const ToDoList = () => {
           </Card>
         ))}
       </Stack>
-      {todos.length === 0 && !loading && (
+      {items.length === 0 && !loading && (
         <Typography align="center" color="text.secondary" mt={2}>
-          No todos yet.
+          No shopping items yet.
         </Typography>
       )}
     </Box>
   )
 }
 
-export default ToDoList
+export default ShoppingList
