@@ -21,7 +21,7 @@
   "keywords": [],
   "license": "MIT",
   "main": "build/app.js",
-  "name": "express-ts-template",
+  "name": "backend",
   "scripts": {
     "build": "tsc --incremental",
     "clean": "rm -rf build tsconfig.tsbuildinfo",

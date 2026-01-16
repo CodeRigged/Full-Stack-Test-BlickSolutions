@@ -1,36 +1,34 @@
-# Express + TypeScript + MongoDB
+# Backend – Express + TypeScript + MongoDB
 
-This is the backend package of a fullstack monorepo managed with [pnpm workspaces](https://pnpm.io/workspaces). It provides a minimal REST API template using Express, TypeScript, and MongoDB (via Mongoose).
+This is the backend package of a fullstack coding challenge from BlickSolutions. It provides a REST API using Express, TypeScript, and MongoDB (via Mongoose).
+
+## Technical Requirements
+
+- Express with TypeScript
+- MongoDB (local or via MongoDB Atlas)
+- No authentication required
 
 ## Features
 
-- Simple RESTful API
+- RESTful API for shopping items
 - MongoDB integration with [mongoose](https://mongoosejs.com/)
 - TypeScript-first development
-- Fast development with [ts-node](https://typestrong.org/ts-node/)
 - Shares types and logic with other packages in the monorepo
 
-## Prerequisites
-
-- **Node.js** (see root package.json for required version)
-- **MongoDB**: You must have a running MongoDB instance (default: mongodb://localhost:27017/todos). You can use a local install or Docker:
-  - Local: [Install MongoDB Community Edition](https://www.mongodb.com/try/download/community)
-  - Docker: `docker run -d -p 27017:27017 --name mongo mongo`
-
-## Usage in Monorepo
+## Setup Instructions
 
 This package is intended to be used as part of the monorepo. To install dependencies and run the backend in development mode, use the root workspace commands:
 
 ```bash
 pnpm install
-pnpm --filter express-ts-template dev
+pnpm --filter backend dev
 ```
 
 You can also build or start the backend specifically:
 
 ```bash
-pnpm --filter express-ts-template build
-pnpm --filter express-ts-template start
+pnpm --filter backend build
+pnpm --filter backend start
 ```
 
 ## Project Structure
@@ -45,20 +43,29 @@ pnpm --filter express-ts-template start
 
 ## API Endpoints
 
-- `GET /todos` – List all todos
-- `POST /todos` – Add a new todo (body: `{ text: string }`)
-- `PUT /todos/:id` – Edit a todo's text (body: `{ text: string }`)
-- `DELETE /todos/:id` – Delete a todo by ID
+- `GET /shopping` – List all shopping items
+- `POST /shopping` – Add a new shopping item (body: `{ name: string }`)
+- `PUT /shopping/:id` – Edit a shopping item's name or bought status (body: `{ name?: string, bought?: boolean }`)
+- `DELETE /shopping/:id` – Delete a shopping item by ID
 - `GET /health` – Health check endpoint (returns 200 if DB is connected)
 
-Example todo object:
+Example shopping item object:
 
 ```json
 {
   "_id": "...",
-  "text": "Buy milk",
-  "completed": false
+  "name": "Buy milk",
+  "bought": false
 }
 ```
 
-Happy coding!
+## UI Libraries
+
+- No external UI libraries are used in the backend.
+
+## Evaluation Criteria
+
+- Application functionality
+- Clean TypeScript code (type safety)
+- Use of Express patterns
+- Code readability and structure

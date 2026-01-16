@@ -1,26 +1,54 @@
-# Fullstack App Monorepo
+# Fullstack Coding Challenge – Monorepo
 
-This project is a fullstack example using a [pnpm](https://pnpm.io/) workspace. It contains both frontend and backend packages managed together.
+This repository contains a fullstack application as a coding challenge for BlickSolutions. The project is structured as a monorepo using [pnpm workspaces](https://pnpm.io/workspaces) and includes both frontend and backend packages.
 
-## Prerequisites
+## Technical Requirements
+
+- **Frontend:** React with TypeScript
+- **Backend:** Express with TypeScript
+- **Database:** MongoDB (local or via MongoDB Atlas)
+- **State Management:** Zustand in the frontend (client-side, e.g., via useState/useEffect)
+- **No authentication required**
+
+## Submission
+
+- Please provide a GitHub repository with a `README.md` that includes:
+  - Setup instructions for running the project
+  - A note on whether any external UI libraries were used
+- The code should be well-structured, with frontend and backend clearly separated
+
+## Evaluation Criteria
+
+- Application functionality
+- Clean TypeScript code
+  - Type safety in both frontend and backend
+- Use of React patterns and Zustand
+- Code readability and structure
+- UI quality (design, usability, responsiveness)
+
+---
+
+## Setup Instructions
+
+### Prerequisites
 
 - [Node.js](https://nodejs.org/) (v20.19.0 or higher recommended)
 - [pnpm](https://pnpm.io/) (v10.28 or higher recommended)
 - [MongoDB](https://www.mongodb.com/try/download/community) (required for backend; can be run locally or via Docker)
 
-To install pnpm globally, run:
+To install pnpm globally:
 
 ```bash
 npm install -g pnpm
 ```
 
-## Getting Started
+### Getting Started
 
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/CodeRigged/fullstack-app-template.git
-   cd react-ts-template
+   git clone <your-repo-url>
+   cd <repo-folder>
    ```
 
 2. **Install dependencies for all packages:**
@@ -52,13 +80,17 @@ npm install -g pnpm
 
 ## Project Structure
 
-- `frontend/` – React TypeScript frontend app
-- `backend/` – Backend service (Express + MongoDB, with controllers/models/routes/services)
-- `shared/` – Shared TypeScript code (types, enums, utilities) for both frontend and backend
+- `frontend/` – React + TypeScript frontend app
+- `backend/` – Express + TypeScript backend service (with MongoDB)
+- `shared/` – Shared TypeScript code (types, enums, utilities)
+
+## UI Libraries
+
+- This project uses [Material UI (MUI)](https://mui.com/) for the frontend UI components.
 
 ## Troubleshooting
 
-- Make sure you are using the correct Node.js and pnpm versions.
+- Ensure you are using the correct Node.js and pnpm versions.
 - If you encounter issues, try running `pnpm install` again.
 - If the backend fails to connect to MongoDB, ensure MongoDB is running locally (default: mongodb://localhost:27017/todos) or update the `MONGO_URI` environment variable.
 

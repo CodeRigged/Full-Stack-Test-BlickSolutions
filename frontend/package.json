@@ -30,7 +30,7 @@
     "typescript": "5.7.2",
     "vite": "6.0.4"
   },
-  "name": "react-ts-template",
+  "name": "frontend",
   "private": true,
   "scripts": {
     "build": "tsc && vite build",
