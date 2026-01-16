@@ -11,6 +11,8 @@ interface ShoppingStore extends PendingState {
   updateItem: (id: ShoppingItem["_id"], updates: Partial<Pick<ShoppingItem, "name" | "bought">>) => Promise<void>
 }
 
+const SHOPPING_API_ENDPOINT = "/shopping"
+
 export const useShoppingStore = create<ShoppingStore>((set, get, ...args) => ({
   ...createPendingSlice(set, get, ...args),
   items: [],
@@ -18,7 +20,7 @@ export const useShoppingStore = create<ShoppingStore>((set, get, ...args) => ({
     const { setIsPending } = get()
     setIsPending(true, "Fetching shopping items...")
     try {
-      const res = await apiFetch("/shopping")
+      const res = await apiFetch(SHOPPING_API_ENDPOINT)
       const data = await res.json()
       set({ items: data.shoppingItems })
     } finally {
@@ -29,7 +31,7 @@ export const useShoppingStore = create<ShoppingStore>((set, get, ...args) => ({
     const { setIsPending, fetchItems } = get()
     setIsPending(true, "Adding item...")
     try {
-      await apiFetch("/shopping", {
+      await apiFetch(SHOPPING_API_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name }),
@@ -43,7 +45,7 @@ export const useShoppingStore = create<ShoppingStore>((set, get, ...args) => ({
     const { setIsPending, fetchItems } = get()
     setIsPending(true, "Updating item...")
     try {
-      await apiFetch(`/shopping/${id}`, {
+      await apiFetch(`${SHOPPING_API_ENDPOINT}/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updates),
@@ -57,7 +59,7 @@ export const useShoppingStore = create<ShoppingStore>((set, get, ...args) => ({
     const { setIsPending, fetchItems } = get()
     setIsPending(true, "Deleting item...")
     try {
-      await apiFetch(`/shopping/${id}`, { method: "DELETE" })
+      await apiFetch(`${SHOPPING_API_ENDPOINT}/${id}`, { method: "DELETE" })
       await fetchItems()
     } finally {
       setIsPending(false)

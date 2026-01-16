@@ -10,10 +10,9 @@ import { useShoppingStore } from "~/stores/shopping-store"
 
 interface ShoppingListItemProps {
   item: ShoppingItem
-  onChange: () => void
 }
 
-const ShoppingListItem = ({ item, onChange }: ShoppingListItemProps) => {
+const ShoppingListItem = ({ item }: ShoppingListItemProps) => {
   const [editMode, setEditMode] = useState(false)
   const [editName, setEditName] = useState(item.name)
 
@@ -24,7 +23,6 @@ const ShoppingListItem = ({ item, onChange }: ShoppingListItemProps) => {
     if (!editName.trim()) return
     await updateItem(item._id, { name: editName })
     setEditMode(false)
-    onChange()
   }
 
   // Cancel editing
@@ -36,13 +34,11 @@ const ShoppingListItem = ({ item, onChange }: ShoppingListItemProps) => {
   // Delete shopping item
   const handleDelete = async () => {
     await deleteItem(item._id)
-    onChange()
   }
 
   // Toggle bought status
   const handleToggleBought = async () => {
     await updateItem(item._id, { bought: !item.bought })
-    onChange()
   }
 
   return (

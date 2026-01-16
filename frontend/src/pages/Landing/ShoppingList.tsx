@@ -18,13 +18,13 @@ const ShoppingList = () => {
       <Typography variant="h4" gutterBottom align="center">
         <FormattedMessage id="pages.landing.shoppingListTitle" defaultMessage="Shopping List" />
       </Typography>
-      <ShoppingListForm onAdd={fetchItems} />
+      <ShoppingListForm />
       {isPending && (
         <Box display="flex" justifyContent="center" my={2}>
           <CircularProgress size={32} />
         </Box>
       )}
-      <ShoppingListItems items={items} onChange={fetchItems} />
+      <ShoppingListItems />
       {items.length === 0 && !isPending && (
         <Typography align="center" color="text.secondary" mt={2}>
           <FormattedMessage id="pages.landing.noShoppingItems" defaultMessage="No shopping items yet." />

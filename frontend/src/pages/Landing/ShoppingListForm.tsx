@@ -3,11 +3,7 @@ import { useState } from "react"
 import { FormattedMessage, useIntl } from "react-intl"
 import { useShoppingStore } from "~/stores/shopping-store"
 
-interface ShoppingListFormProps {
-  onAdd: () => void
-}
-
-const ShoppingListForm = ({ onAdd }: ShoppingListFormProps) => {
+const ShoppingListForm = () => {
   const intl = useIntl()
   const [newItem, setNewItem] = useState("")
   const { addItem, isPending } = useShoppingStore()
@@ -17,7 +13,6 @@ const ShoppingListForm = ({ onAdd }: ShoppingListFormProps) => {
     if (!newItem.trim()) return
     await addItem(newItem)
     setNewItem("")
-    onAdd()
   }
 
   return (
