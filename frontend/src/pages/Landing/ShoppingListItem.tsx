@@ -87,7 +87,7 @@ const ShoppingListItem = ({ item, onChange, loading }: ShoppingListItemProps) =>
           variant={item.bought ? "contained" : "outlined"}
           color={item.bought ? "success" : "inherit"}
           onClick={handleToggleBought}
-          disabled={loading || item.bought}
+          disabled={loading || item.bought || editMode}
           sx={{ minWidth: 80 }}
         >
           {item.bought ? "Bought" : "Buy"}
