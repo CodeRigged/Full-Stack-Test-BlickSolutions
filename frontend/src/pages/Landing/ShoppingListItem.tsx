@@ -6,31 +6,25 @@ import { Button, Card, CardActions, CardContent, TextField, Typography } from "@
 import { useState } from "react"
 import { FormattedMessage } from "react-intl"
 import { ShoppingItem } from "shared/types"
-import { apiFetch } from "~/utils/api"
+import { useShoppingStore } from "~/stores/shopping-store"
 
 interface ShoppingListItemProps {
   item: ShoppingItem
-  loading: boolean
   onChange: () => void
 }
 
-const BASE_ROUTE = "/shopping"
-
-const ShoppingListItem = ({ item, onChange, loading }: ShoppingListItemProps) => {
+const ShoppingListItem = ({ item, onChange }: ShoppingListItemProps) => {
   const [editMode, setEditMode] = useState(false)
   const [editName, setEditName] = useState(item.name)
 
+  const { updateItem, deleteItem, isPending } = useShoppingStore()
+
   // Save edited shopping item
-  const handleSaveEdit = () => {
+  const handleSaveEdit = async () => {
     if (!editName.trim()) return
-    apiFetch(`${BASE_ROUTE}/${item._id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: editName }),
-    }).then(() => {
-      setEditMode(false)
-      onChange()
-    })
+    await updateItem(item._id, { name: editName })
+    setEditMode(false)
+    onChange()
   }
 
   // Cancel editing
@@ -40,17 +34,15 @@ const ShoppingListItem = ({ item, onChange, loading }: ShoppingListItemProps) =>
   }
 
   // Delete shopping item
-  const handleDelete = () => {
-    apiFetch(`${BASE_ROUTE}/${item._id}`, { method: "DELETE" }).then(() => onChange())
+  const handleDelete = async () => {
+    await deleteItem(item._id)
+    onChange()
   }
 
   // Toggle bought status
-  const handleToggleBought = () => {
-    apiFetch(`${BASE_ROUTE}/${item._id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ bought: !item.bought }),
-    }).then(() => onChange())
+  const handleToggleBought = async () => {
+    await updateItem(item._id, { bought: !item.bought })
+    onChange()
   }
 
   return (
@@ -67,7 +59,7 @@ const ShoppingListItem = ({ item, onChange, loading }: ShoppingListItemProps) =>
               if (e.key === "Enter") handleSaveEdit()
               if (e.key === "Escape") handleCancelEdit()
             }}
-            disabled={loading}
+            disabled={isPending}
             sx={{ ml: 2 }}
           />
         ) : (
@@ -88,7 +80,7 @@ const ShoppingListItem = ({ item, onChange, loading }: ShoppingListItemProps) =>
           variant={item.bought ? "contained" : "outlined"}
           color={item.bought ? "success" : "inherit"}
           onClick={handleToggleBought}
-          disabled={loading || item.bought || editMode}
+          disabled={isPending || item.bought || editMode}
           sx={{ minWidth: 80 }}
         >
           {item.bought ? (
@@ -105,7 +97,7 @@ const ShoppingListItem = ({ item, onChange, loading }: ShoppingListItemProps) =>
               color="primary"
               startIcon={<SaveIcon />}
               onClick={handleSaveEdit}
-              disabled={loading || !editName.trim()}
+              disabled={isPending || !editName.trim()}
               sx={{ ml: 1 }}
             >
               <FormattedMessage id="common.save" defaultMessage="Save" />
@@ -115,7 +107,7 @@ const ShoppingListItem = ({ item, onChange, loading }: ShoppingListItemProps) =>
               color="inherit"
               startIcon={<CancelIcon />}
               onClick={handleCancelEdit}
-              disabled={loading}
+              disabled={isPending}
               sx={{ ml: 1 }}
             >
               <FormattedMessage id="common.cancel" defaultMessage="Cancel" />
@@ -128,7 +120,7 @@ const ShoppingListItem = ({ item, onChange, loading }: ShoppingListItemProps) =>
               color="info"
               startIcon={<EditIcon />}
               onClick={() => setEditMode(true)}
-              disabled={loading || item.bought}
+              disabled={isPending || item.bought}
               sx={{ ml: 1 }}
             >
               <FormattedMessage id="common.edit" defaultMessage="Edit" />
@@ -138,7 +130,7 @@ const ShoppingListItem = ({ item, onChange, loading }: ShoppingListItemProps) =>
               color="error"
               startIcon={<DeleteIcon />}
               onClick={handleDelete}
-              disabled={loading}
+              disabled={isPending}
               sx={{ ml: 1 }}
             >
               <FormattedMessage id="common.delete" defaultMessage="Delete" />

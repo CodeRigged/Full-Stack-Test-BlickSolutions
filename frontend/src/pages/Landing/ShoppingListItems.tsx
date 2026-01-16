@@ -4,15 +4,14 @@ import ShoppingListItem from "./ShoppingListItem"
 
 interface ShoppingListItemsProps {
   items: ShoppingItem[]
-  loading: boolean
   onChange: () => void
 }
 
-const ShoppingListItems = ({ items, onChange, loading }: ShoppingListItemsProps) => {
+const ShoppingListItems = ({ items, onChange }: ShoppingListItemsProps) => {
   return (
     <Stack spacing={2}>
       {items.map(item => (
-        <ShoppingListItem key={item._id as unknown as string} item={item} onChange={onChange} loading={loading} />
+        <ShoppingListItem key={item._id as unknown as string} item={item} onChange={onChange} />
       ))}
     </Stack>
   )

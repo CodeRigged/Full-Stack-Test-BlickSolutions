@@ -1,26 +1,12 @@
 import { Box, CircularProgress, Typography } from "@mui/material"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { FormattedMessage } from "react-intl"
-import { ShoppingItem } from "shared/types"
-import { useErrorStore } from "~/stores/state-handlers"
-import { apiFetch } from "~/utils/api"
+import { useShoppingStore } from "~/stores/shopping-store"
 import ShoppingListForm from "./ShoppingListForm"
 import ShoppingListItems from "./ShoppingListItems"
 
 const ShoppingList = () => {
-  const [items, setItems] = useState<ShoppingItem[]>([])
-  const [loading, setLoading] = useState(false)
-  const { setError } = useErrorStore()
-
-  // Fetch shopping items
-  const fetchItems = () => {
-    setLoading(true)
-    apiFetch("/shopping")
-      .then(res => res.json())
-      .then(data => setItems(data.shoppingItems))
-      .catch(e => setError(e))
-      .finally(() => setLoading(false))
-  }
+  const { items, isPending, fetchItems } = useShoppingStore()
 
   useEffect(() => {
     fetchItems()
@@ -32,14 +18,14 @@ const ShoppingList = () => {
       <Typography variant="h4" gutterBottom align="center">
         <FormattedMessage id="pages.landing.shoppingListTitle" defaultMessage="Shopping List" />
       </Typography>
-      <ShoppingListForm onAdd={fetchItems} loading={loading} />
-      {loading && (
+      <ShoppingListForm onAdd={fetchItems} />
+      {isPending && (
         <Box display="flex" justifyContent="center" my={2}>
           <CircularProgress size={32} />
         </Box>
       )}
-      <ShoppingListItems items={items} onChange={fetchItems} loading={loading} />
-      {items.length === 0 && !loading && (
+      <ShoppingListItems items={items} onChange={fetchItems} />
+      {items.length === 0 && !isPending && (
         <Typography align="center" color="text.secondary" mt={2}>
           <FormattedMessage id="pages.landing.noShoppingItems" defaultMessage="No shopping items yet." />
         </Typography>

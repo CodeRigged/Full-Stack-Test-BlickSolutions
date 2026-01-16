@@ -1,28 +1,23 @@
 import { Box, Button, TextField } from "@mui/material"
 import { useState } from "react"
 import { FormattedMessage, useIntl } from "react-intl"
-import { apiFetch } from "~/utils/api"
+import { useShoppingStore } from "~/stores/shopping-store"
 
 interface ShoppingListFormProps {
-  loading: boolean
   onAdd: () => void
 }
 
-const ShoppingListForm = ({ onAdd, loading }: ShoppingListFormProps) => {
+const ShoppingListForm = ({ onAdd }: ShoppingListFormProps) => {
   const intl = useIntl()
   const [newItem, setNewItem] = useState("")
+  const { addItem, isPending } = useShoppingStore()
 
-  const handleAdd = (e: React.FormEvent) => {
+  const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!newItem.trim()) return
-    apiFetch("/shopping", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newItem }),
-    }).then(() => {
-      setNewItem("")
-      onAdd()
-    })
+    await addItem(newItem)
+    setNewItem("")
+    onAdd()
   }
 
   return (
@@ -34,11 +29,11 @@ const ShoppingListForm = ({ onAdd, loading }: ShoppingListFormProps) => {
           id: "pages.landing.addShoppingItem",
           defaultMessage: "Add a new shopping item",
         })}
-        disabled={loading}
+        disabled={isPending}
         size="small"
         fullWidth
       />
-      <Button type="submit" variant="contained" color="primary" disabled={loading || !newItem.trim()}>
+      <Button type="submit" variant="contained" color="primary" disabled={isPending || !newItem.trim()}>
         <FormattedMessage id="common.add" defaultMessage="Add" />
       </Button>
     </Box>
