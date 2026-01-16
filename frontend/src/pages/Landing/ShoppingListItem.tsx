@@ -4,6 +4,7 @@ import EditIcon from "@mui/icons-material/Edit"
 import SaveIcon from "@mui/icons-material/Save"
 import { Button, Card, CardActions, CardContent, TextField, Typography } from "@mui/material"
 import { useState } from "react"
+import { FormattedMessage } from "react-intl"
 import { ShoppingItem } from "shared/types"
 import { apiFetch } from "~/utils/api"
 
@@ -90,7 +91,11 @@ const ShoppingListItem = ({ item, onChange, loading }: ShoppingListItemProps) =>
           disabled={loading || item.bought || editMode}
           sx={{ minWidth: 80 }}
         >
-          {item.bought ? "Bought" : "Buy"}
+          {item.bought ? (
+            <FormattedMessage id="pages.landing.bought" defaultMessage="Bought" />
+          ) : (
+            <FormattedMessage id="pages.landing.buy" defaultMessage="Buy" />
+          )}
         </Button>
         <span style={{ flex: 1 }} />
         {editMode ? (
@@ -103,7 +108,7 @@ const ShoppingListItem = ({ item, onChange, loading }: ShoppingListItemProps) =>
               disabled={loading || !editName.trim()}
               sx={{ ml: 1 }}
             >
-              Save
+              <FormattedMessage id="common.save" defaultMessage="Save" />
             </Button>
             <Button
               size="small"
@@ -113,7 +118,7 @@ const ShoppingListItem = ({ item, onChange, loading }: ShoppingListItemProps) =>
               disabled={loading}
               sx={{ ml: 1 }}
             >
-              Cancel
+              <FormattedMessage id="common.cancel" defaultMessage="Cancel" />
             </Button>
           </>
         ) : (
@@ -126,7 +131,7 @@ const ShoppingListItem = ({ item, onChange, loading }: ShoppingListItemProps) =>
               disabled={loading || item.bought}
               sx={{ ml: 1 }}
             >
-              Edit
+              <FormattedMessage id="common.edit" defaultMessage="Edit" />
             </Button>
             <Button
               size="small"
@@ -136,7 +141,7 @@ const ShoppingListItem = ({ item, onChange, loading }: ShoppingListItemProps) =>
               disabled={loading}
               sx={{ ml: 1 }}
             >
-              Delete
+              <FormattedMessage id="common.delete" defaultMessage="Delete" />
             </Button>
           </>
         )}

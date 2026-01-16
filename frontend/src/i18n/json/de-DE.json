@@ -1,5 +1,10 @@
 {
   "common": {
+    "add": "Hinzufügen",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "save": "Speichern",
     "update": "{what} wird aktualisiert"
   },
   "languages": {
@@ -9,6 +14,11 @@
   },
   "pages": {
     "landing": {
+      "addShoppingItem": "Neuen Einkaufsartikel hinzufügen",
+      "bought": "Gekauft",
+      "buy": "Kaufen",
+      "noShoppingItems": "Noch keine Einkaufsartikel.",
+      "shoppingListTitle": "Einkaufsliste",
       "title": "Startseite"
     },
     "logout": {

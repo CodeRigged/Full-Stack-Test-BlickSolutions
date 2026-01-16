@@ -1,5 +1,6 @@
 import { Box, CircularProgress, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
+import { FormattedMessage } from "react-intl"
 import { ShoppingItem } from "shared/types"
 import { useErrorStore } from "~/stores/state-handlers"
 import { apiFetch } from "~/utils/api"
@@ -29,7 +30,7 @@ const ShoppingList = () => {
   return (
     <Box maxWidth={480} mx="auto" mt={4}>
       <Typography variant="h4" gutterBottom align="center">
-        Shopping List
+        <FormattedMessage id="pages.landing.shoppingListTitle" defaultMessage="Shopping List" />
       </Typography>
       <ShoppingListForm onAdd={fetchItems} loading={loading} />
       {loading && (
@@ -40,7 +41,7 @@ const ShoppingList = () => {
       <ShoppingListItems items={items} onChange={fetchItems} loading={loading} />
       {items.length === 0 && !loading && (
         <Typography align="center" color="text.secondary" mt={2}>
-          No shopping items yet.
+          <FormattedMessage id="pages.landing.noShoppingItems" defaultMessage="No shopping items yet." />
         </Typography>
       )}
     </Box>

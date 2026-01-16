@@ -1,5 +1,6 @@
 import { Box, Button, TextField } from "@mui/material"
 import { useState } from "react"
+import { FormattedMessage, useIntl } from "react-intl"
 import { apiFetch } from "~/utils/api"
 
 interface ShoppingListFormProps {
@@ -8,6 +9,7 @@ interface ShoppingListFormProps {
 }
 
 const ShoppingListForm = ({ onAdd, loading }: ShoppingListFormProps) => {
+  const intl = useIntl()
   const [newItem, setNewItem] = useState("")
 
   const handleAdd = (e: React.FormEvent) => {
@@ -28,13 +30,16 @@ const ShoppingListForm = ({ onAdd, loading }: ShoppingListFormProps) => {
       <TextField
         value={newItem}
         onChange={e => setNewItem(e.target.value)}
-        placeholder="Add a new shopping item"
+        placeholder={intl.formatMessage({
+          id: "pages.landing.addShoppingItem",
+          defaultMessage: "Add a new shopping item",
+        })}
         disabled={loading}
         size="small"
         fullWidth
       />
       <Button type="submit" variant="contained" color="primary" disabled={loading || !newItem.trim()}>
-        Add
+        <FormattedMessage id="common.add" defaultMessage="Add" />
       </Button>
     </Box>
   )

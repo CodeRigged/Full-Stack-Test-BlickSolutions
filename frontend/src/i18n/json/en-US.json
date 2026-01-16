@@ -1,5 +1,10 @@
 {
   "common": {
+    "add": "Add",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save",
     "update": "{what} is being updated"
   },
   "languages": {
@@ -9,6 +14,11 @@
   },
   "pages": {
     "landing": {
+      "addShoppingItem": "Add a new shopping item",
+      "bought": "Bought",
+      "buy": "Buy",
+      "noShoppingItems": "No shopping items yet.",
+      "shoppingListTitle": "Shopping List",
       "title": "Home page"
     },
     "logout": {
